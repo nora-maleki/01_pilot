@@ -234,17 +234,38 @@ const experimental_stimulus = function(group, topic){
     }
 
     if(group == 3){
+      rnd = getRandInt(1,2);
+      if(rnd == 1){
         return `Approximately 60% of participants who agreed with you about  ${topic} chose to call the police and report the robber.
                 <br />
                 <br />
                 Approximately 85% of participants who disagreed with you about  ${topic} chose to do nothing and leave the robber alone.`
+      }
+
+      else{
+        return `Approximately 85% of participants who disagreed with you about  ${topic} chose to do nothing and leave the robber alone.
+                <br />
+                <br />
+                Approximately 60% of participants who agreed with you about  ${topic} chose to call the police and report the robber.`
+      }
+
     }
 
     if(group == 4){
-        return `Approximately 60% of participants who agreed with you about  ${topic} chose to do nothing and leave the robber alone.
+      rnd = getRandInt(1,2);
+      if(rnd == 1){
+        return `Approximately 60% of participants who disagreed with you about  ${topic} chose to do nothing and leave the robber alone.
                 <br />
                 <br />
-                Approximately 85% of participants who disagreed with you about  ${topic} chose to call the police and report the robber.`
+                Approximately 85% of participants who agreed with you about  ${topic} chose to call the police and report the robber.`
+      }
+
+      else{
+        return `Approximately 85% of participants who agreed with you about  ${topic} chose to call the police and report the robber.
+                <br />
+                <br />
+                Approximately 60% of participants who disagreed with you about  ${topic} chose to do nothing and leave the robber alone.`
+      }
     }
 }
 
@@ -286,6 +307,7 @@ const post_test_viewTemplate = function(config, CT){
             <label for="education">${quest.edu.title}:</label>
             <select id="education" name="education">
                 <option></option>
+                <option value="lower_high_school">Lower Than High School</option>
                 <option value="${quest.edu.graduated_high_school}">${quest.edu.graduated_high_school}</option>
                 <option value="${quest.edu.graduated_college}">${quest.edu.graduated_college}</option>
                 <option value="${quest.edu.higher_degree}">${quest.edu.higher_degree}</option>
@@ -302,6 +324,12 @@ const post_test_viewTemplate = function(config, CT){
         <p class='magpie-view-text'>
             <label for="city" name="city">City:</label>
             <input type="text" id="city"/>
+        </p>
+        <br>
+        <br>
+        <p class="magpie-view-text">
+            <label for="comments">How did you like the experiment and what would you improve ? :</label>
+            <textarea name="comments" id="comments" rows="8" cols="80"></textarea>
         </p>
         <br>
         <br>
@@ -324,6 +352,9 @@ const post_test_handler = function(config, CT, magpie) {
             magpie.global_data.education = $("#education").val();
             magpie.global_data.country = $("#country").val();
             magpie.global_data.city = $("#city").val();
+            magpie.global_data.comments = $("#comments")
+            .val()
+            .trim();
             magpie.global_data.endTime = Date.now();
             magpie.global_data.timeSpent =
                 (magpie.global_data.endTime -
@@ -486,6 +517,26 @@ one_button_click = function(config, CT, magpie){
         });
 };
 
+
+six_point_likert_scale = function(){
+    return `
+            <div class='magpie-view-answer-container'>
+                <strong class='magpie-response-rating-option magpie-view-text'>Definitely call the police <br /> and report the robber</strong>
+                <label for="1" class='magpie-response-rating'>1</label>
+                <input type="radio" name="answer" id="1" value="1" />
+                <label for="2" class='magpie-response-rating'>2</label>
+                <input type="radio" name="answer" id="2" value="2" />
+                <label for="3" class='magpie-response-rating'>3</label>
+                <input type="radio" name="answer" id="3" value="3" />
+                <label for="4" class='magpie-response-rating'>4</label>
+                <input type="radio" name="answer" id="4" value="4" />
+                <label for="5" class='magpie-response-rating'>5</label>
+                <input type="radio" name="answer" id="5" value="5" />
+                <label for="6" class='magpie-response-rating'>6</label>
+                <input type="radio" name="answer" id="6" value="6" />
+                <strong class='magpie-response-rating-option magpie-view-text'>Definitely do nothing <br /> and leave the robber alone</strong>
+            </div>`;
+}
 /* Generators for custom view templates, answer container elements and enable response functions
 *
 *
